@@ -4,21 +4,6 @@ var passport = require("passport");
 var Usuario = mongoose.model("Usuario");
 const usuario = require("../models/usuario");
 
-// GET USUARIO
-router.get("/", (req, res, next) => {
-  Usuario.findById(req.query.id)
-    .then((usuario) => {
-      if (!usuario) {
-        return res.sendStatus(401);
-      }
-
-      return res.json({ usuario: usuario.aAuthJSON() });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
 // LOGIN
 router.post("/login", (req, res, next) => {
   if (!req.body.email) {
@@ -49,6 +34,16 @@ router.post("/login", (req, res, next) => {
       }
     }
   )(req, res, next);
+});
+
+//LOGOUT
+router.post("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    return true;
+  });
 });
 
 // CREAR USUARIO
