@@ -3,8 +3,8 @@ var express = require("express");
 var mongoose = require("mongoose");
 var passport = require("passport");
 var bodyParser = require("body-parser");
-var LocalStrategy = require("passport-local");
-var passportLocalMongoose = require("passport-local-mongoose");
+var JwtStrategy = require("passport-jwt").Strategy;
+var ExtractJwt = require("passport-jwt").ExtractJwt;
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -15,38 +15,27 @@ var usuariosRouter = require("./routes/usuarios");
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  require("express-session")({
-    // Se debería utilizar una clave aleatoria guardada en un archivo .env
-    secret: "1273812628162",
-    resave: false,
-    saveUninitialized: false,
+app.use(passport.initialize());
+
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.JWT_SECRET;
+
+passport.use(
+  new JwtStrategy(opts, function (jwt_payload, done) {
+    Usuario.findOne({ id: jwt_payload.sub }, function (err, usuario) {
+      if (err) {
+        return done(err, false);
+      }
+
+      if (!usuario) {
+        return done(null, false);
+      }
+
+      return done(null, usuario);
+    });
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "email",
-      passwordField: "contraseña",
-    },
-    function verify(email, contraseña, cb) {
-      const usuario = Usuario.findOne({
-        email: email,
-        contraseña: contraseña,
-      }).exec();
-      if (!usuario) {
-        return cb(null, false, {
-          message: "Email o Contraseña no válidos",
-        });
-      }
-      return cb(null, usuario);
-    }
-  )
-);
-// passport.serializeUser(Usuario.serializeUser());
-// passport.deserializeUser(Usuario.deserializeUser());
 
 app.use("/usuarios", usuariosRouter);
 
@@ -57,6 +46,7 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
+  console.log(err);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

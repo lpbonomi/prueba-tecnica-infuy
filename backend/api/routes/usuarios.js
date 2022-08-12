@@ -17,7 +17,7 @@ router.post("/login", (req, res, next) => {
   }
 
   passport.authenticate(
-    "local",
+    "jwt",
     { session: false },
     async (err, usuario, info) => {
       if (err) {
@@ -25,13 +25,13 @@ router.post("/login", (req, res, next) => {
         return next(err);
       }
 
-      if (usuario) {
-        usuario = await usuario;
-        usuario.token = usuario.generarJWT();
-        return res.json({ usuario: usuario.aAuthJSON() });
-      } else {
+      if (!usuario) {
         return res.status(422).json(info);
       }
+
+      usuario = await usuario;
+      usuario.token = usuario.generarJWT();
+      return res.json({ usuario: usuario.aAuthJSON() });
     }
   )(req, res, next);
 });
@@ -40,9 +40,10 @@ router.post("/login", (req, res, next) => {
 router.post("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) {
+      console.log(err);
       return next(err);
     }
-    return true;
+    res.send({ message: "Deslogueado" });
   });
 });
 
@@ -57,11 +58,33 @@ router.post("/", (req, res, next) => {
   usuario
     .save()
     .then(() => {
-      return res.json({ usuario: usuario.aAuthJSON() });
+      return res.status(201).json({ usuario: usuario.aAuthJSON() });
     })
     .catch((err) => {
       console.log(err);
+      res.status(422).send({ message: "Error al crear usuario" });
     });
 });
+
+// GUARDAR CLAVE
+router.patch(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    var usuario = req.user;
+
+    // TODO clave required
+    usuario.clave = req.body.clave;
+
+    usuario
+      .save()
+      .then(() => {
+        return res.json({ usuario: usuario.aAuthJSON() });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+);
 
 module.exports = router;
