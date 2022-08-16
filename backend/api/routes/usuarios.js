@@ -51,9 +51,9 @@ router.post("/logout", (req, res, next) => {
 router.post("/", (req, res, next) => {
   var usuario = new Usuario();
 
-  usuario.email = req.body.email;
-  usuario.contraseña = req.body.contraseña;
-  usuario.nombre = req.body.nombre;
+  usuario.email = req.body.usuario.email;
+  usuario.contraseña = req.body.usuario.contraseña;
+  usuario.nombre = req.body.usuario.nombre;
 
   usuario
     .save()

@@ -5,6 +5,7 @@ var passport = require("passport");
 var bodyParser = require("body-parser");
 var JwtStrategy = require("passport-jwt").Strategy;
 var ExtractJwt = require("passport-jwt").ExtractJwt;
+var cors = require("cors");
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -14,7 +15,10 @@ var usuariosRouter = require("./routes/usuarios");
 
 var app = express();
 
+app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(passport.initialize());
 
 var opts = {};

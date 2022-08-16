@@ -22,7 +22,6 @@ var usuarioSchema = new mongoose.Schema({
     lowercase: false,
     unique: false,
     required: [true, "No puede estar vacío"],
-    match: [/^[a-zA-Z0-9]+$/, "No es válido"],
     index: true,
   },
   clave: {
