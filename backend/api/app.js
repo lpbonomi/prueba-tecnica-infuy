@@ -3,9 +3,8 @@ var express = require("express");
 var mongoose = require("mongoose");
 var passport = require("passport");
 var bodyParser = require("body-parser");
-var JwtStrategy = require("passport-jwt").Strategy;
-var ExtractJwt = require("passport-jwt").ExtractJwt;
 var cors = require("cors");
+require("./auth/auth");
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -20,26 +19,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
-
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET;
-
-passport.use(
-  new JwtStrategy(opts, function (jwt_payload, done) {
-    Usuario.findOne({ id: jwt_payload.sub }, function (err, usuario) {
-      if (err) {
-        return done(err, false);
-      }
-
-      if (!usuario) {
-        return done(null, false);
-      }
-
-      return done(null, usuario);
-    });
-  })
-);
 
 app.use("/usuarios", usuariosRouter);
 

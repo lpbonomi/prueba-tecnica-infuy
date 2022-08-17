@@ -3,38 +3,44 @@ var router = require("express").Router();
 var passport = require("passport");
 var Usuario = mongoose.model("Usuario");
 const usuario = require("../models/usuario");
+const jwt = require("jsonwebtoken");
 
-// LOGIN
-router.post("/login", (req, res, next) => {
-  if (!req.body.email) {
-    return res.status(422).json({ errors: { email: "No puede estar vacío" } });
-  }
+router.post(
+  "/login",
+  (req, res, next) => {
+    console.log(req.body.usuario);
+    next();
+  },
+  async (req, res, next) => {
+    passport.authenticate("login", async (err, usuario, info) => {
+      try {
+        if (err || !usuario) {
+          console.log(err);
+          const error = new Error(
+            "Ocurrió un error al intentar loguear al usuario"
+          );
 
-  if (!req.body.contraseña) {
-    return res
-      .status(422)
-      .json({ errors: { contraseña: "No puede estar vacío" } });
-  }
+          return next(error);
+        }
 
-  passport.authenticate(
-    "jwt",
-    { session: false },
-    async (err, usuario, info) => {
-      if (err) {
-        console.log(err);
-        return next(err);
+        req.login(usuario, { session: false }, async (error) => {
+          if (error) {
+            console.log(error);
+            return next(error);
+          }
+
+          const body = { _id: usuario._id, email: usuario.email };
+
+          const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
+
+          return res.json({ token });
+        });
+      } catch (error) {
+        return next(error);
       }
-
-      if (!usuario) {
-        return res.status(422).json(info);
-      }
-
-      usuario = await usuario;
-      usuario.token = usuario.generarJWT();
-      return res.json({ usuario: usuario.aAuthJSON() });
-    }
-  )(req, res, next);
-});
+    })(req, res, next);
+  }
+);
 
 //LOGOUT
 router.post("/logout", (req, res, next) => {
@@ -48,23 +54,13 @@ router.post("/logout", (req, res, next) => {
 });
 
 // CREAR USUARIO
-router.post("/", (req, res, next) => {
-  var usuario = new Usuario();
-
-  usuario.email = req.body.usuario.email;
-  usuario.contraseña = req.body.usuario.contraseña;
-  usuario.nombre = req.body.usuario.nombre;
-
-  usuario
-    .save()
-    .then(() => {
-      return res.status(201).json({ usuario: usuario.aAuthJSON() });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(422).send({ message: "Error al crear usuario" });
-    });
-});
+router.post(
+  "/",
+  passport.authenticate("registro", { session: false }),
+  async (req, res, next) => {
+    res.json({ message: "Registrado con éxito." });
+  }
+);
 
 // GUARDAR CLAVE
 router.patch(

@@ -1,25 +1,67 @@
-import React from 'react'
-import { EmailComponent } from '../EmailComponent'
-import { ContraseñaComponent } from '../ContraseñaComponent'
+import React, { useState } from "react";
+import { EmailComponent } from "../components/EmailComponent";
+import { ContraseñaComponent } from "../components/ContraseñaComponent";
+import { hashearContraseña } from "../utils/utils";
 
 export const LoginComponent = () => {
+  const [email, setEmail] = useState("");
+  const [contraseña, setContraseña] = useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const contraseña_hasheada = hashearContraseña(contraseña);
+
+    fetch("http://localhost:9000/usuarios/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        usuario: {
+          email: email,
+          contraseña: contraseña_hasheada,
+        },
+      }),
+    })
+      .then(function (response) {
+        //REDIRECCIONAR
+        console.log(response);
+      })
+      .catch(function (error) {
+        alert("Error al loguear usuario.");
+        console.log(error);
+      });
+  }
+
   return (
     <div className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
-          <div className="row justify-content-center">
-              <div className="col-xxl-4 col-lg-5">
-                  <div className="card ">
-                      <div className="card-body p-4">
-                        <form >
-                            < EmailComponent />
-                            <ContraseñaComponent es_confirmacion = {false}/>
-                            <div className="d-grid gap-2 ">
-                                <button className="btn btn-primary" type="submit" id="registro">Login</button>
-                            </div>
-                        </form >
-                      </div>
-                  </div>
-              </div>
+      <div className="row justify-content-center">
+        <div className="col-xxl-4 col-lg-5">
+          <div className="card ">
+            <div className="card-body p-4">
+              <h1 className="text-center">Login</h1>
+              <form onSubmit={handleSubmit}>
+                <EmailComponent value={email} setEmail={setEmail} />
+                <ContraseñaComponent
+                  es_confirmacion={false}
+                  value={contraseña}
+                  updateContraseña={setContraseña}
+                />
+                <div className="d-grid gap-2 ">
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    id="registro"
+                  >
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-)
-}
+  );
+};

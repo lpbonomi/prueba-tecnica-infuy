@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { EmailComponent } from "../components/EmailComponent";
 import { ContraseñaComponent } from "../components/ContraseñaComponent";
 import PasswordChecklist from "react-password-checklist";
-import bcrypt from "bcryptjs";
-import axios from "axios";
+import { hashearContraseña } from "../utils/utils";
 
 export function RegistroComponent() {
   const [nombre, setNombre] = useState("");
@@ -14,7 +13,7 @@ export function RegistroComponent() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const contraseña_hasheada = hashearContraseña();
+    const contraseña_hasheada = hashearContraseña(contraseña);
 
     fetch("http://localhost:9000/usuarios", {
       method: "POST",
@@ -41,11 +40,6 @@ export function RegistroComponent() {
 
   function contraseñasCoinciden() {
     return contraseña === confirmacion_contraseña;
-  }
-
-  function hashearContraseña() {
-    var salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(contraseña, salt);
   }
 
   return (
