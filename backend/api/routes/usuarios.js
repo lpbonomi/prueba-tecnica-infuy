@@ -5,42 +5,35 @@ var Usuario = mongoose.model("Usuario");
 const usuario = require("../models/usuario");
 const jwt = require("jsonwebtoken");
 
-router.post(
-  "/login",
-  (req, res, next) => {
-    console.log(req.body.usuario);
-    next();
-  },
-  async (req, res, next) => {
-    passport.authenticate("login", async (err, usuario, info) => {
-      try {
-        if (err || !usuario) {
-          console.log(err);
-          const error = new Error(
-            "Ocurrió un error al intentar loguear al usuario"
-          );
+router.post("/login", async (req, res, next) => {
+  passport.authenticate("login", async (err, usuario, info) => {
+    try {
+      if (err || !usuario) {
+        console.log(err);
+        const error = new Error(
+          "Ocurrió un error al intentar loguear al usuario"
+        );
 
+        return next(error);
+      }
+
+      req.login(usuario, { session: false }, async (error) => {
+        if (error) {
+          console.log(error);
           return next(error);
         }
 
-        req.login(usuario, { session: false }, async (error) => {
-          if (error) {
-            console.log(error);
-            return next(error);
-          }
+        const body = { _id: usuario._id, email: usuario.email };
 
-          const body = { _id: usuario._id, email: usuario.email };
+        const token = jwt.sign({ usuario: body }, process.env.JWT_SECRET);
 
-          const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
-
-          return res.json({ jwt_token : token });
-        });
-      } catch (error) {
-        return next(error);
-      }
-    })(req, res, next);
-  }
-);
+        return res.json({ jwt_token: token });
+      });
+    } catch (error) {
+      return next(error);
+    }
+  })(req, res, next);
+});
 
 //LOGOUT
 router.post("/logout", (req, res, next) => {
@@ -66,16 +59,18 @@ router.post(
 router.patch(
   "/",
   passport.authenticate("jwt", { session: false }),
-  (req, res, next) => {
-    var usuario = req.user;
+  async (req, res, next) => {
+    var user = req.user;
 
+    var usuario = await Usuario.findOne({ email: user.email }).exec();
     // TODO clave required
     usuario.clave = req.body.clave;
-
     usuario
       .save()
       .then(() => {
-        return res.json({ usuario: usuario.aAuthJSON() });
+        return res
+          .status(200)
+          .json({ message: "Clave actualizada con éxito." });
       })
       .catch((err) => {
         console.log(err);

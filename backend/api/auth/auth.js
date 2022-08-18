@@ -70,9 +70,9 @@ passport.use(
       secretOrKey: process.env.JWT_SECRET,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     },
-    async (token, done) => {
+    async (jwt_token, done) => {
       try {
-        return done(null, token.usuario);
+        return done(null, jwt_token.usuario);
       } catch (error) {
         console.log(error);
         done(error);

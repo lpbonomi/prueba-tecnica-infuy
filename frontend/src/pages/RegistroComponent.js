@@ -38,10 +38,6 @@ export function RegistroComponent() {
       });
   }
 
-  function contraseñasCoinciden() {
-    return contraseña === confirmacion_contraseña;
-  }
-
   return (
     <div className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
       <div className="row justify-content-center">

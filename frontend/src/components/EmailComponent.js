@@ -1,5 +1,3 @@
-import React, { Component } from "react";
-
 export function EmailComponent(props) {
   return (
     <div className="mb-3">

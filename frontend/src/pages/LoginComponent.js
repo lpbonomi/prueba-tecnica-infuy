@@ -11,7 +11,6 @@ export const LoginComponent = (props) => {
     event.preventDefault();
 
     const contraseña_hasheada = hashearContraseña(contraseña);
-
     fetch("http://localhost:9000/usuarios/login", {
       method: "POST",
       headers: {
@@ -26,9 +25,9 @@ export const LoginComponent = (props) => {
     })
       .then(async function (response) {
         //REDIRECCIONAR
-        
+
         const body = await response.json();
-        props.store.dispatch({ type: 'jwt/save', payload: body.jwt_token });
+        props.store.dispatch({ type: "jwt/save", payload: body.jwt_token });
       })
       .catch(function (error) {
         alert("Error al loguear usuario.");
