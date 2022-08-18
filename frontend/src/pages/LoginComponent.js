@@ -3,7 +3,7 @@ import { EmailComponent } from "../components/EmailComponent";
 import { ContraseñaComponent } from "../components/ContraseñaComponent";
 import { hashearContraseña } from "../utils/utils";
 
-export const LoginComponent = () => {
+export const LoginComponent = (props) => {
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
 
@@ -24,9 +24,11 @@ export const LoginComponent = () => {
         },
       }),
     })
-      .then(function (response) {
+      .then(async function (response) {
         //REDIRECCIONAR
-        console.log(response);
+        
+        const body = await response.json();
+        props.store.dispatch({ type: 'jwt/save', payload: body.jwt_token });
       })
       .catch(function (error) {
         alert("Error al loguear usuario.");

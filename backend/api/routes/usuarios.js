@@ -33,7 +33,7 @@ router.post(
 
           const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
 
-          return res.json({ token });
+          return res.json({ jwt_token : token });
         });
       } catch (error) {
         return next(error);
