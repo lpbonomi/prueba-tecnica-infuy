@@ -11,6 +11,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-password-checklist": "^1.4.0",

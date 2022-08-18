@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { EmailComponent } from "../components/EmailComponent";
 import { ContraseñaComponent } from "../components/ContraseñaComponent";
-import { hashearContraseña } from "../utils/utils";
+import { hashearContraseña, desencriptarString } from "../utils/utils";
+import jwt from "jwt-decode";
+import { getContraseña, getJwt } from "../reducers/auth";
 
 export const LoginComponent = (props) => {
   const [email, setEmail] = useState("");
@@ -25,9 +27,21 @@ export const LoginComponent = (props) => {
     })
       .then(async function (response) {
         //REDIRECCIONAR
-
         const body = await response.json();
+
         props.store.dispatch({ type: "jwt/save", payload: body.jwt_token });
+        props.store.dispatch({ type: "contraseña/save", payload: contraseña });
+
+        const clave_privada_encriptada = jwt(body.jwt_token).usuario.clave;
+        const clave_privada = desencriptarString(
+          clave_privada_encriptada,
+          contraseña
+        );
+
+        props.store.dispatch({
+          type: "clave_privada/save",
+          payload: clave_privada,
+        });
       })
       .catch(function (error) {
         alert("Error al loguear usuario.");

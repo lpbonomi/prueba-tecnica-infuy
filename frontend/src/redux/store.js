@@ -2,14 +2,26 @@ import { configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
-import { jwtReducer } from "../reducers/auth";
+import {
+  jwtReducer,
+  contraseñaReducer,
+  clavePrivadaReducer,
+} from "../reducers/auth";
+import { combineReducers } from "redux";
 
 const persistConfig = {
   key: process.env.REACT_APP_REDUX_KEY,
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, jwtReducer);
+const persistedReducer = persistReducer(
+  persistConfig,
+  combineReducers({
+    jwtReducer,
+    contraseñaReducer,
+    clavePrivadaReducer,
+  })
+);
 
 export const store = configureStore({
   reducer: persistedReducer,

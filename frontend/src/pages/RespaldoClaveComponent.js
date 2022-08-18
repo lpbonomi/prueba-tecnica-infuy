@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { esClaveValida, enciptarClave } from "../utils/utils";
-import { getJwt } from "../reducers/auth";
+import { esClaveValida, enciptarClave, enciptarString } from "../utils/utils";
+import { getContraseña, getJwt } from "../reducers/auth";
 
 export const RespaldoClaveComponent = (props) => {
   const [clave, setClave] = useState("");
@@ -13,7 +13,8 @@ export const RespaldoClaveComponent = (props) => {
       return;
     }
 
-    const clave_encriptada = enciptarClave(clave);
+    const clave_encriptacion = getContraseña(props.store.getState());
+    const clave_encriptada = enciptarString(clave, clave_encriptacion);
 
     fetch("http://localhost:9000/usuarios", {
       method: "PATCH",
@@ -27,9 +28,10 @@ export const RespaldoClaveComponent = (props) => {
         },
       }),
     })
-      .then(function (response) {
+      .then(async function (response) {
         //REDIRECCIONAR
-        console.log(response);
+
+        props.store.dispatch({ type: "clave_privada/save", payload: clave });
       })
       .catch(function (error) {
         alert("Error al guardar clave.");

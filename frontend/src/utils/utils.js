@@ -14,17 +14,14 @@ export function esClaveValida(clave) {
   return true;
 }
 
-export function enciptarClave(clave) {
+export function enciptarString(valor, clave_encriptacion) {
   return CryptoJS.AES.encrypt(
-    JSON.stringify(clave),
-    process.env.REACT_APP_ENCRYPTION_KEY
+    JSON.stringify(valor),
+    clave_encriptacion
   ).toString();
 }
 
-export function desencriptarClave(clave_encriptada) {
-  var bytes = CryptoJS.AES.decrypt(
-    clave_encriptada,
-    process.env.REACT_APP_ENCRYPTION_KEY
-  );
+export function desencriptarString(valor_encriptado, clave_encriptacion) {
+  var bytes = CryptoJS.AES.decrypt(valor_encriptado, clave_encriptacion);
   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 }
