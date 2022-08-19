@@ -23,7 +23,11 @@ router.post("/login", async (req, res, next) => {
           return next(error);
         }
 
-        const body = { _id: usuario._id, email: usuario.email };
+        const body = {
+          _id: usuario._id,
+          email: usuario.email,
+          clave: usuario.clave,
+        };
 
         const token = jwt.sign({ usuario: body }, process.env.JWT_SECRET);
 
@@ -64,7 +68,8 @@ router.patch(
 
     var usuario = await Usuario.findOne({ email: user.email }).exec();
     // TODO clave required
-    usuario.clave = req.body.clave;
+    usuario.clave = req.body.usuario.clave;
+
     usuario
       .save()
       .then(() => {
