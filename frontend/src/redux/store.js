@@ -7,6 +7,7 @@ import {
   contraseñaReducer,
   clavePrivadaReducer,
 } from "../reducers/auth";
+import { nonceReducer } from "../reducers/blockchain";
 import { combineReducers } from "redux";
 
 const persistConfig = {
@@ -20,6 +21,7 @@ const persistedReducer = persistReducer(
     jwtReducer,
     contraseñaReducer,
     clavePrivadaReducer,
+    nonceReducer,
   })
 );
 
