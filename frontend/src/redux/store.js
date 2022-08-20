@@ -2,12 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
-import {
-  jwtReducer,
-  contraseñaReducer,
-  clavePrivadaReducer,
-} from "../reducers/auth";
-import { nonceReducer } from "../reducers/blockchain";
+import { jwtReducer, contraseñaReducer } from "../reducers/auth";
+import { nonceReducer, clavePrivadaReducer } from "../reducers/blockchain";
 import { combineReducers } from "redux";
 
 const persistConfig = {

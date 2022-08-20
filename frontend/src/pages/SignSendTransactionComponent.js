@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ethers, Wallet } from "ethers";
-import { getClavePrivada } from "../reducers/auth";
+import { getClavePrivada } from "../reducers/blockchain";
 import { getNonce } from "../reducers/blockchain";
 import { ChainSelectorComponent } from "../components/ChainSelectorComponent";
 

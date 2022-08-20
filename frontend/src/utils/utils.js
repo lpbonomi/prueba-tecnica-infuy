@@ -25,3 +25,8 @@ export function desencriptarString(valor_encriptado, clave_encriptacion) {
   var bytes = CryptoJS.AES.decrypt(valor_encriptado, clave_encriptacion);
   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 }
+
+export function getPublicAddress(clave) {
+  const wallet = new ethers.Wallet(clave);
+  return wallet.address;
+}

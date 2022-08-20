@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { esClaveValida, enciptarClave, enciptarString } from "../utils/utils";
+import { esClaveValida, enciptarString } from "../utils/utils";
 import { getContraseña, getJwt } from "../reducers/auth";
 
 export const RespaldoClaveComponent = (props) => {
