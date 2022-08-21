@@ -3,8 +3,10 @@ import { EmailComponent } from "../components/EmailComponent";
 import { ContraseñaComponent } from "../components/ContraseñaComponent";
 import PasswordChecklist from "react-password-checklist";
 import { hashearContraseña } from "../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 export function RegistroComponent() {
+  const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
@@ -31,6 +33,7 @@ export function RegistroComponent() {
       .then(function (response) {
         //REDIRECCIONAR
         console.log(response);
+        navigate("/login");
       })
       .catch(function (error) {
         alert("Error al crear usuario.");
@@ -86,6 +89,16 @@ export function RegistroComponent() {
                   </button>
                 </div>
               </form>
+              <div class="row mt-3">
+                <div class="col-12 text-center">
+                  <p class="text-muted">
+                    ¿Ya tienes una cuenta?
+                    <a href="login" class="text-muted ms-1">
+                      <b>Iniciar sesión</b>
+                    </a>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
