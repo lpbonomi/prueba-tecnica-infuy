@@ -52,3 +52,33 @@ export function getNonce(state, network) {
     return null;
   }
 }
+
+const tokensState = {};
+
+export function tokenReducer(state = tokensState, action) {
+  const { type, payload } = action;
+  const { chainId, address, symbol, decimals } = payload;
+
+  if (type === "tokens/save") {
+    if (!(chainId in state)) {
+      state[chainId] = {};
+    }
+    state[chainId].push({
+      chainId: chainId,
+      address: address,
+      symbol: symbol,
+      decimals: decimals,
+    });
+    return state;
+  }
+
+  return state;
+}
+
+export function getTokens(state, network) {
+  try {
+    return state.tokenReducer[network];
+  } catch {
+    return null;
+  }
+}

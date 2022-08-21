@@ -9,8 +9,10 @@ require("./auth/auth");
 mongoose.connect(process.env.MONGODB_URI);
 
 var Usuario = require("./models/usuario");
+var Token = require("./models/token");
 
 var usuariosRouter = require("./routes/usuarios");
+var tokensRouter = require("./routes/tokens");
 
 var app = express();
 
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use("/usuarios", usuariosRouter);
+app.use("/tokens", tokensRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

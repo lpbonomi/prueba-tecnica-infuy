@@ -4,6 +4,7 @@ import { LoginComponent } from "./pages/LoginComponent";
 import { RespaldoClaveComponent } from "./pages/RespaldoClaveComponent";
 import { SignSendTransactionComponent } from "./pages/SignSendTransactionComponent";
 import { HistorialTransaccionesComponent } from "./pages/HistorialTransaccionesComponent";
+import { AgregarTokensComponent } from "./pages/AgregarTokensComponent";
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -46,6 +47,14 @@ function App() {
                 }
               />
             </Route>
+            <Route
+              path="/tokens/agregar"
+              element={
+                <LayoutComponent>
+                  <AgregarTokensComponent store={store} />
+                </LayoutComponent>
+              }
+            />
             <Route
               path="*"
               element={

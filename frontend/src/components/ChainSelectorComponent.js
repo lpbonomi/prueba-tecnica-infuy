@@ -14,7 +14,9 @@ export const ChainSelectorComponent = (props) => {
         isClearable
         onChange={(eleccion) => {
           props.setChainId(eleccion.value);
-          props.handleChainChange(eleccion.value);
+          if (props.handleChainChange) {
+            props.handleChainChange(eleccion.value);
+          }
         }}
         options={[
           { value: 1, label: "mainnet" },
