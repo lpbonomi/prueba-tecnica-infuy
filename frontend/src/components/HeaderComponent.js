@@ -4,7 +4,12 @@ export const HeaderComponent = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
+          <li className="nav-item">
+            <a className="nav-link" href="/tokens/balances">
+              Balances
+            </a>
+          </li>
+          <li className="nav-item">
             <a className="nav-link" href="/transacciones/historial">
               Historial de Transacciones
             </a>

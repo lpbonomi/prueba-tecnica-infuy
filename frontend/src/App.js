@@ -10,6 +10,7 @@ import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { LayoutComponent } from "./components/LayoutComponent";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BalanceTokensComponent } from "./pages/BalanceTokensComponent";
 
 function App() {
   return (
@@ -17,6 +18,24 @@ function App() {
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
           <Routes>
+            <Route path="tokens">
+              <Route
+                path="balances"
+                element={
+                  <LayoutComponent>
+                    <BalanceTokensComponent store={store} />
+                  </LayoutComponent>
+                }
+              />
+              <Route
+                path="agregar"
+                element={
+                  <LayoutComponent>
+                    <AgregarTokensComponent store={store} />
+                  </LayoutComponent>
+                }
+              />
+            </Route>
             <Route path="usuarios">
               <Route path="login" element={<LoginComponent store={store} />} />
               <Route path="logout" element={<LoginComponent store={store} />} />
@@ -48,14 +67,6 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              path="/tokens/agregar"
-              element={
-                <LayoutComponent>
-                  <AgregarTokensComponent store={store} />
-                </LayoutComponent>
-              }
-            />
             <Route
               path="*"
               element={
