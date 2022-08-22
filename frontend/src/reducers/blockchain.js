@@ -30,8 +30,8 @@ export function nonceReducer(state = nonceState, action) {
 
   if (type === "nonce/save") {
     const { network, nonce } = payload;
-    state[network] = nonce;
-    return state;
+
+    return { ...state, [network]: nonce };
   }
 
   if (type === PURGE) {
@@ -60,12 +60,15 @@ export function tokenReducer(state = tokensState, action) {
     if (!(chainId in state)) {
       state[chainId] = [];
     }
-    state[chainId].push({
+    const new_element = {
       address: address,
       symbol: symbol,
       decimals: decimals,
-    });
-    return state;
+    };
+
+    const aux = state[chainId];
+    aux.push(new_element);
+    return { ...state, aux };
   }
 
   if (type === PURGE) {
@@ -76,9 +79,5 @@ export function tokenReducer(state = tokensState, action) {
 }
 
 export function getTokens(state, network) {
-  try {
-    return state.tokenReducer[network];
-  } catch {
-    return null;
-  }
+  return state.tokenReducer[network] ? state.tokenReducer[network] : [];
 }

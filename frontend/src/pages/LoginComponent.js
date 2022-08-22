@@ -50,6 +50,7 @@ export const LoginComponent = (props) => {
           });
 
           navigate("/transacciones/historial");
+          return;
         }
 
         navigate("/usuarios/respaldo-clave");
