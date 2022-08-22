@@ -3,7 +3,11 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import { jwtReducer, contraseñaReducer } from "../reducers/auth";
-import { nonceReducer, clavePrivadaReducer } from "../reducers/blockchain";
+import {
+  nonceReducer,
+  clavePrivadaReducer,
+  tokenReducer,
+} from "../reducers/blockchain";
 import { combineReducers } from "redux";
 
 const persistConfig = {
@@ -18,6 +22,7 @@ const persistedReducer = persistReducer(
     contraseñaReducer,
     clavePrivadaReducer,
     nonceReducer,
+    tokenReducer,
   })
 );
 

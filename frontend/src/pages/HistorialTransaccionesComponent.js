@@ -2,10 +2,12 @@ import { getPublicAddress } from "../utils/utils";
 import { getClavePrivada } from "../reducers/blockchain";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export function HistorialTransaccionesComponent(props) {
   const [filas, setFilas] = useState([]);
   const [itemsPaginator, setItemsPaginator] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const clave_privada = getClavePrivada(props.store.getState());
   const address = getPublicAddress(clave_privada);
@@ -21,7 +23,8 @@ export function HistorialTransaccionesComponent(props) {
     async function getHistory() {
       history = await etherscanProvider.getHistory(address);
       console.log(history);
-      populateTableAndPaginator(1); //TODO get Pagina de url
+      const pagina = searchParams.get("page");
+      populateTableAndPaginator(pagina);
     }
     getHistory();
   }, []);
@@ -35,7 +38,7 @@ export function HistorialTransaccionesComponent(props) {
 
     const filas_de_pagina_actual = history.slice(
       (pagina - 1) * transacciones_por_pagina,
-      transacciones_por_pagina
+      pagina * transacciones_por_pagina
     );
 
     populateTable(filas_de_pagina_actual);
@@ -126,7 +129,7 @@ export function HistorialTransaccionesComponent(props) {
   return (
     <div className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
       <div className="row justify-content-center">
-        <div className="col-xxl-4 col-lg-5">
+        <div className="col-11">
           <div className="card ">
             <div className="card-body p-4">
               <h1 className="text-center">Historial de Transacciones</h1>

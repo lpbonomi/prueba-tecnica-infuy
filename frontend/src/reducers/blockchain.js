@@ -57,14 +57,14 @@ const tokensState = {};
 
 export function tokenReducer(state = tokensState, action) {
   const { type, payload } = action;
-  const { chainId, address, symbol, decimals } = payload;
 
   if (type === "tokens/save") {
+    const { chainId, address, symbol, decimals } = payload;
+
     if (!(chainId in state)) {
-      state[chainId] = {};
+      state[chainId] = [];
     }
     state[chainId].push({
-      chainId: chainId,
       address: address,
       symbol: symbol,
       decimals: decimals,
