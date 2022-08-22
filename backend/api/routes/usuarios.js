@@ -4,6 +4,8 @@ var passport = require("passport");
 var Usuario = mongoose.model("Usuario");
 const usuario = require("../models/usuario");
 const jwt = require("jsonwebtoken");
+const Token = mongoose.model("Token");
+const Schema = mongoose.Schema;
 
 router.post("/login", async (req, res, next) => {
   passport.authenticate("login", async (err, usuario, info) => {
@@ -23,10 +25,17 @@ router.post("/login", async (req, res, next) => {
           return next(error);
         }
 
+        const tokens = await Token.find({
+          usuario_id: mongoose.Types.ObjectId(usuario._id),
+        })
+          .all()
+          .exec();
+
         const body = {
           _id: usuario._id,
           email: usuario.email,
           clave: usuario.clave,
+          tokens: tokens,
         };
 
         const token = jwt.sign({ usuario: body }, process.env.JWT_SECRET);

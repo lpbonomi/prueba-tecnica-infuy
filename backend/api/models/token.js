@@ -29,4 +29,6 @@ var tokenSchema = new mongoose.Schema({
   },
 });
 
+tokenSchema.index({ address: 1, chain_id: 1 }, { unique: true });
+
 module.exports = mongoose.model("Token", tokenSchema);

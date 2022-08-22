@@ -82,7 +82,7 @@ export function RegistroComponent() {
                   }}
                 />
                 <br></br>
-                <div classNameName="d-grid gap-2 ">
+                <div className="d-grid gap-2 ">
                   <button className="btn btn-primary" type="submit">
                     Registrar
                   </button>
