@@ -1,3 +1,5 @@
+import { PURGE } from "redux-persist";
+
 const clavePrivadaState = { clave_privada: null };
 
 export function clavePrivadaReducer(state = clavePrivadaState, action) {
@@ -10,11 +12,8 @@ export function clavePrivadaReducer(state = clavePrivadaState, action) {
     };
   }
 
-  if (type === "clave_privada/delete") {
-    return {
-      ...state,
-      clave_privada: null,
-    };
+  if (type === PURGE) {
+    return clavePrivadaState;
   }
 
   return state;
@@ -35,11 +34,8 @@ export function nonceReducer(state = nonceState, action) {
     return state;
   }
 
-  if (type === "nonce/delete") {
-    return {
-      ...state,
-      nonces: null,
-    };
+  if (type === PURGE) {
+    return nonceState;
   }
 
   return state;
@@ -70,6 +66,10 @@ export function tokenReducer(state = tokensState, action) {
       decimals: decimals,
     });
     return state;
+  }
+
+  if (type === PURGE) {
+    return tokensState;
   }
 
   return state;

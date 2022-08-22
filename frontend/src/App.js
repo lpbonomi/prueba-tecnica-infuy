@@ -19,6 +19,7 @@ function App() {
           <Routes>
             <Route path="usuarios">
               <Route path="login" element={<LoginComponent store={store} />} />
+              <Route path="logout" element={<LoginComponent store={store} />} />
               <Route path="registro" element={<RegistroComponent />} />
               <Route
                 path="respaldo-clave"

@@ -31,9 +31,8 @@ export function RegistroComponent() {
       }),
     })
       .then(function (response) {
-        //REDIRECCIONAR
         console.log(response);
-        navigate("/login");
+        navigate("/usuarios/login");
       })
       .catch(function (error) {
         alert("Error al crear usuario.");
@@ -83,17 +82,17 @@ export function RegistroComponent() {
                   }}
                 />
                 <br></br>
-                <div className="d-grid gap-2 ">
+                <div classNameName="d-grid gap-2 ">
                   <button className="btn btn-primary" type="submit">
                     Registrar
                   </button>
                 </div>
               </form>
-              <div class="row mt-3">
-                <div class="col-12 text-center">
-                  <p class="text-muted">
+              <div className="row mt-3">
+                <div className="col-12 text-center">
+                  <p className="text-muted">
                     ¿Ya tienes una cuenta?
-                    <a href="login" class="text-muted ms-1">
+                    <a href="login" className="text-muted ms-1">
                       <b>Iniciar sesión</b>
                     </a>
                   </p>

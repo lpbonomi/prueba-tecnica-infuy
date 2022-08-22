@@ -1,3 +1,5 @@
+import { PURGE } from "redux-persist";
+
 const jwtState = { jwt_token: null };
 
 export function jwtReducer(state = jwtState, action) {
@@ -10,11 +12,8 @@ export function jwtReducer(state = jwtState, action) {
     };
   }
 
-  if (type === "jwt/delete") {
-    return {
-      ...state,
-      jwt_token: null,
-    };
+  if (type === PURGE) {
+    return jwtState;
   }
 
   return state;
@@ -36,11 +35,8 @@ export function contraseñaReducer(state = contraseñaState, action) {
     };
   }
 
-  if (type === "contraseña/delete") {
-    return {
-      ...state,
-      contraseña: null,
-    };
+  if (type === PURGE) {
+    return contraseñaState;
   }
 
   return state;

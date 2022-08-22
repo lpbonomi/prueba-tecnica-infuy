@@ -55,7 +55,7 @@ router.post(
   "/",
   passport.authenticate("registro", { session: false }),
   async (req, res, next) => {
-    res.json({ message: "Registrado con éxito." });
+    res.status(201).json({ message: "Registrado con éxito." });
   }
 );
 

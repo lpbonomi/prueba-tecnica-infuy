@@ -25,7 +25,7 @@ export const HeaderComponent = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/usuarios/logout">
+            <a className="nav-link" href="/usuarios/login">
               Logout
             </a>
           </li>

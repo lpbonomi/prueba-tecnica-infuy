@@ -5,11 +5,14 @@ import { hashearContraseña, desencriptarString } from "../utils/utils";
 import jwt from "jwt-decode";
 import { getContraseña, getJwt } from "../reducers/auth";
 import { useNavigate } from "react-router-dom";
+import { resetStore } from "../redux/store";
 
 export const LoginComponent = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
+
+  resetStore();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -28,24 +31,28 @@ export const LoginComponent = (props) => {
       }),
     })
       .then(async function (response) {
-        //REDIRECCIONAR
         const body = await response.json();
 
         props.store.dispatch({ type: "jwt/save", payload: body.jwt_token });
         props.store.dispatch({ type: "contraseña/save", payload: contraseña });
 
         const clave_privada_encriptada = jwt(body.jwt_token).usuario.clave;
-        const clave_privada = desencriptarString(
-          clave_privada_encriptada,
-          contraseña
-        );
 
-        props.store.dispatch({
-          type: "clave_privada/save",
-          payload: clave_privada,
-        });
+        if (clave_privada_encriptada) {
+          const clave_privada = desencriptarString(
+            clave_privada_encriptada,
+            contraseña
+          );
 
-        navigate("/transacciones/historial");
+          props.store.dispatch({
+            type: "clave_privada/save",
+            payload: clave_privada,
+          });
+
+          navigate("/transacciones/historial");
+        }
+
+        navigate("/usuarios/respaldo-clave");
       })
       .catch(function (error) {
         alert("Error al loguear usuario.");
@@ -77,11 +84,11 @@ export const LoginComponent = (props) => {
                   </button>
                 </div>
               </form>
-              <div class="row mt-3">
-                <div class="col-12 text-center">
-                  <p class="text-muted">
+              <div className="row mt-3">
+                <div className="col-12 text-center">
+                  <p className="text-muted">
                     ¿No tienes una cuenta?
-                    <a href="registro" class="text-muted ms-1">
+                    <a href="registro" className="text-muted ms-1">
                       <b>Regístrate</b>
                     </a>
                   </p>

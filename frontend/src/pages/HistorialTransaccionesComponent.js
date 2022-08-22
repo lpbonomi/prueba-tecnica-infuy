@@ -24,7 +24,7 @@ export function HistorialTransaccionesComponent(props) {
       history = await etherscanProvider.getHistory(address);
       console.log(history);
       const pagina = searchParams.get("page");
-      populateTableAndPaginator(pagina);
+      populateTableAndPaginator(pagina ? pagina : 1);
     }
     getHistory();
   }, []);
